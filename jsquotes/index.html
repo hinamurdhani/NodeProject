@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documetn</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            text-align: center;
+            /* font-family: 'Quicksand', sans-serif; */
+        }
+        .box{
+            margin: 200px;
+            border: 10px solid transparent;
+            padding: 25px;
+            border-color: rgb(26, 9, 9);
+            background-color: lightskyblue;
+            
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+<div id="quotes"></div>
+<div id="author"></div>
+<button id="newQ">New Quote</button>
+<button id="tweetme">Tweet</button>
+</div>
+<script>
+    let realdata = "";
+    let quotesdata = "";
+    const quotes = document.getElementById("quotes");
+    const author = document.getElementById("author");
+    const newQuote = document.getElementById("newQ");
+    const tweetme = document.getElementById("tweetme");
+
+    const tweetNow = () => {
+        const tweetpost = `https://twitter.com/intent/tweet?text=${quotesdata.text}`;
+        window.open(tweetpost);
+    }
+    const getNewQuotes = () => {
+        let num = Math.floor(Math.random() * 100);
+        quotesdata = realdata[num];
+        quotes.innerText = `${quotesdata.text}`;
+        quotesdata.author == null ? (author.innerText = "Unknown") :  (author.innerText = `${quotesdata.author}`);
+    
+        
+       
+        // author.innerText = `${quotesdata.author}`;
+         
+    }
+    const getQuotes = async() => {
+        const api = "https://type.fit/api/quotes";
+        try{
+            let data = await fetch(api);
+            //convert readable stream to json
+            realdata = await data.json();
+            // console.log(realdata[0].text); 
+            getNewQuotes();
+        }catch(error){
+
+        }
+    };
+    tweetme.addEventListener('click', tweetNow);
+    newQuote.addEventListener('click', getNewQuotes);
+    getQuotes();
+</script>
+</body>
+</html>
